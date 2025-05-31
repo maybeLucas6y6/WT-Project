@@ -8,10 +8,10 @@ $googleMapsApiKey = 'AIzaSyDQz3eIc4qVe1iNkZaehSEz94GhJRxkPP0';
 <head>
     <title>Google Map - Iași, Romania</title>
     <style>
-        #map {
-            height: 800px;
-            width: 100%;
-        }
+            #map {
+                height: 100vh; 
+                width: 100%;
+            }
     </style>
 </head>
 

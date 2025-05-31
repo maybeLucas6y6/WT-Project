@@ -56,56 +56,34 @@ $googleMapsApiKey = 'AIzaSyDQz3eIc4qVe1iNkZaehSEz94GhJRxkPP0';
                 }
             });
 
-            function fetchPollutionData(){
-                console.log("Fetching data...");
+            function fetchPollutionData() {
+    console.log("Fetching data...");
+    const center = map.getCenter();
+    const lat = center.lat();
+    const lng = center.lng();
 
-                const center = map.getCenter();
-                const lat = center.lat();
-                const lng = center.lng();
+    fetch(`pollution_proxy.php?lat=${lat}&lng=${lng}&radius=10000&limit=50`)
+        .then(res => res.json())
+        .then(data => {
+            console.log("Pollution data:", data);
+            data.results.forEach(entry => {
+                const color = getPollutionColor(entry.value);
+                const circle = new google.maps.Circle({
+                    strokeColor: color,
+                    strokeOpacity: 0.8,
+                    strokeWeight: 1,
+                    fillColor: color,
+                    fillOpacity: 0.35,
+                    map: map,
+                    center: { lat: entry.latitude, lng: entry.longitude },
+                    radius: 1800
+                });
+                pollutionCircles.push(circle);
+            });
+        })
+        .catch(err => console.error("Error:", err));
+}
 
-            console.log("Fetching pollution data for:", lat, lng);
-
-                fetch(`pollution_proxy.php?lat=${lat}&lng=${lng}&radius=10000&limit=50`)  
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Pollution data:", data);
-                    let results = data.results;
-                    
-                    results.forEach(entry => {
-                        const sensor =  entry.sensors?.[2];
-                        if(!sensor) return;
-
-                        const sensorId = sensor.id;
-
-                        fetch(`sensor_proxy.php?id=${sensorId}`)
-                        .then(res => res.json())
-                        .then(measurementData => {
-                            const value = measurementData.results[0].value;
-
-                            const color = getPollutionColor(value);
-                            console.log("Sensor measurement:", measurementData);
-                            const circle = new google.maps.Circle({
-                                strokeColor: color,
-                                strokeOpacity: 0.8,
-                                strokeWeight: 1,
-                                fillColor: color,
-                                fillOpacity: 0.35,
-                                map: map,
-                                center: {lat: entry.coordinates.latitude, lng: entry.coordinates.longitude},
-                                radius: 1800
-                            })
-                            
-                            pollutionCircles.push(circle);
-
-                        });
-
-
-  
-                    })
-
-                })
-                .catch(err => console.error("Error:", err));
-            }
 
             function clearPollutionLayer(){
                 pollutionCircles.forEach(circle => circle.setMap(null));

@@ -1,0 +1,27 @@
+<?php
+
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *"); // Optional: adjust in production
+
+$id = isset($_GET['id']) ? $_GET['id'] : '7775626';
+$apiKey = 'af8f7c1e20b6fc5ef42bde8834f8a7c174492b710040beaf5404f5f25cbbc46a'; // Replace with your real key
+
+$url = "https://api.openaq.org/v3/sensors/$id/days?limit=1";
+
+$opts = [
+    "http" => [
+        "method" => "GET",
+        "header" => "X-API-Key: $apiKey\r\n"
+    ]
+];
+
+$context = stream_context_create($opts);
+$response = file_get_contents($url, false, $context);
+
+if ($response === FALSE) {
+    http_response_code(500);
+    echo json_encode(["error" => "Unable to fetch data"]);
+    exit;
+}
+
+echo $response;

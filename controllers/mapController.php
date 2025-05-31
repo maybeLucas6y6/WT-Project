@@ -7,13 +7,14 @@ class MapController extends Controller
     public function __construct()
     {
         $this->model = new MapModel();
+        $this->view = new MapView('AIzaSyDQz3eIc4qVe1iNkZaehSEz94GhJRxkPP0');
     }
 
     public function handleRequest()
-    {
+    {//eu primesc de la index o actiune, in functie de ce se intampla in scriptul de js
         $action = $_GET['action'] ?? null;
 
-        switch ($action) {
+        switch ($action) { // daca trebuie datele de polutie, fac o cerere de la model, care face un api call la OpenAq
             case 'pollution':
                 $lat = $_GET['lat'] ?? null;
                 $lng = $_GET['lng'] ?? null;
@@ -22,7 +23,7 @@ class MapController extends Controller
                 $this->respondJSON($this->model->getPollutionData($lat, $lng, $radius, $limit));
                 break;
 
-            case 'sensor':
+            case 'sensor': // sensor tot OpenAq, tot la model
                 $id = $_GET['id'] ?? null;
                 $this->respondJSON($this->model->getSensorData($id));
                 break;
@@ -34,7 +35,7 @@ class MapController extends Controller
     }
 
     private function respondJSON($data)
-    {
+    {//trimite raspunsul inapoi la js
         header("Content-Type: application/json");
         header("Access-Control-Allow-Origin: *");
         echo json_encode($data);

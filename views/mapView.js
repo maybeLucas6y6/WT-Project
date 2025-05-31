@@ -1,10 +1,11 @@
 let map;
 let pollutionCircles = [];
 
-function initMap() {
+function initMap() { //logica efectiva pt harta (trebuie musai js)
     const geocoder = new google.maps.Geocoder();
     const address = "Iasi, Romania";
 
+    //eu ii dau o adresa normala, pe care apoi o geocodez in lat si lng ca sa pot sa o dau la google
     geocoder.geocode({ address: address }, function (results, status) {
         if (status === 'OK') {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -20,7 +21,7 @@ function initMap() {
             alert('Geocode failed: ' + status);
         }
     });
-
+    //Astept sa vad daca trebuie randat overlay ul de poluare
     document.getElementById("pollution-toggle").addEventListener("change", function () {
         if (this.checked) {
             fetchPollutionData();
@@ -29,7 +30,7 @@ function initMap() {
         }
     });
 }
-
+// fac un apel AJAX la index.php, care apoi merge la model, and so on, pana cand am la final toate cercurile randate
 function fetchPollutionData() {
     const center = map.getCenter();
     const lat = center.lat();
@@ -43,7 +44,7 @@ function fetchPollutionData() {
             const results = data.results;
 
             results.forEach(entry => {
-                const sensor = entry.sensors?.[2]; // Change index if necessary
+                const sensor = entry.sensors?.[2];
                 if (!sensor) return;
 
                 const sensorId = sensor.id;
@@ -51,7 +52,7 @@ function fetchPollutionData() {
                 fetch(`index.php?action=sensor&id=${sensorId}`)
                     .then(res => res.json())
                     .then(measurementData => {
-                        const value = measurementData.results?.[0]?.value;
+                        const value = measurementData.results[0].value;
                         if (value === undefined) return;
 
                         const color = getPollutionColor(value);
@@ -77,7 +78,7 @@ function fetchPollutionData() {
         })
         .catch(err => console.error("Pollution data fetch error:", err));
 }
-
+//Sterg cercurile
 function clearPollutionLayer() {
     pollutionCircles.forEach(circle => circle.setMap(null));
     pollutionCircles = [];
@@ -85,12 +86,12 @@ function clearPollutionLayer() {
 }
 
 function getPollutionColor(value) {
-    if (value <= 12) return '#00e400';        // Good (green)
-    else if (value <= 35.4) return '#ffff00'; // Moderate (yellow)
-    else if (value <= 55.4) return '#ff7e00'; // Unhealthy for Sensitive Groups (orange)
-    else if (value <= 150.4) return '#ff0000'; // Unhealthy (red)
-    else if (value <= 250.4) return '#8f3f97'; // Very Unhealthy (purple)
-    else return '#7e0023';                    // Hazardous (maroon)
+    if (value <= 12) return '#00e400';        
+    else if (value <= 35.4) return '#ffff00'; 
+    else if (value <= 55.4) return '#ff7e00'; 
+    else if (value <= 150.4) return '#ff0000'; 
+    else if (value <= 250.4) return '#8f3f97';
+    else return '#7e0023';                    
 }
 
 

@@ -40,4 +40,6 @@ if ($result && pg_num_rows($result) > 0) {
 } else {
     echo "No users found.";
 }
+
+$control = new userController();
 ?>

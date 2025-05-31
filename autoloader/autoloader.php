@@ -2,12 +2,15 @@
 
 function autoload($class)
 {
-    $path = DIRECTOR_SITE . SLASH . 'database' . SLASH . strtolower($class) . '.php';
-    if (file_exists($path)) {
-        require_once $path;
-    } else {
-        echo "Nu găsesc clasa $class";
-        exit();
+    
+    if (file_exists(DIRECTOR_SITE . SLASH . 'database' . SLASH . strtolower($class) . '.php')) {
+        require_once DIRECTOR_SITE . SLASH . 'database' . SLASH . strtolower($class) . '.php';
+    } else if (file_exists(DIRECTOR_SITE . SLASH . 'models' . SLASH . strtolower($class) . '.php')) {
+        require_once DIRECTOR_SITE . SLASH . 'models' . SLASH . strtolower($class) . '.php';
+    } else if (file_exists(DIRECTOR_SITE . SLASH . 'views' . SLASH . strtolower($class) . '.php')) {
+        require_once DIRECTOR_SITE . SLASH . 'views' . SLASH . strtolower($class) . '.php';
+    } else if (file_exists(DIRECTOR_SITE . SLASH . 'controllers' . SLASH . strtolower($class) . '.php')) {
+        require_once DIRECTOR_SITE . SLASH . 'controllers' . SLASH . strtolower($class) . '.php';
     }
 }
 

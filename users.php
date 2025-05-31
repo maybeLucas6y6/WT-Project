@@ -1,5 +1,7 @@
 <?php
-require_once 'database/database.php';
+define ('SLASH', DIRECTORY_SEPARATOR);
+define ('DIRECTOR_SITE', dirname(__FILE__));
+require_once 'autoloader/autoloader.php';
 
 $db = new Database();
 

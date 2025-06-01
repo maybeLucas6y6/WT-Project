@@ -32,6 +32,19 @@ class MapController extends Controller
                 $this->respondJSON($this->model->getAssets());
                 break;
 
+            case 'addAsset':
+                $description = $_POST['description'] ?? null;
+                $address = $_POST['address'] ?? null;
+                $price = $_POST['price'] ?? null;
+                $this->respondJSON($this->model->addAsset($description, $address, $price));
+                break;
+
+            case 'temperature':
+                $lat = $_GET['lat'] ?? null;
+                $lng = $_GET['lng'] ?? null;
+                $this->respondJSON($this->model->getTemperatureData($lat, $lng));
+                break;
+                
             default:
                 http_response_code(400);
                 echo json_encode(['error' => 'Invalid action']);

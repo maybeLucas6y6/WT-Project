@@ -4,7 +4,7 @@
 class MapModel
 {
     private $connection;
-    private $apiKeyPollution = 'af8f7c1e20b6fc5ef42bde8834f8a7c174492b710040beaf5404f5f25cbbc46a';
+    private $apiKeyPollution = 'nope';
     //self explanatory, request-uri in php normale
 
 

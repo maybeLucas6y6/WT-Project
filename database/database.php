@@ -1,9 +1,9 @@
 <?php
 class Database {
     private static $instance = null;
-    private $host = "database-1.ctigssii84mr.eu-north-1.rds.amazonaws.com";
+    private $host = "nope";
     private $port = "5432";
-    private $dbname = "TW_Database";
+    private $dbname = "TW_Project";
     private $user = "postgres";
     private $password = "postgres";
     private $connection;

@@ -150,12 +150,16 @@ function fetchAssets(){
             console.log("data received:", data);
             data.forEach(asset => {
                 geocoder.geocode({address : asset.address}, function(results, status) {
-                    new google.maps.Marker({
+                    const marker = new google.maps.Marker({
                         map: map,
                         position: results[0].geometry.location,
                         title: asset.address.concat('\n').concat(asset.description) 
                     });
+                    marker.addListener("click", function () {
+                        window.location.href = `index.php?action=viewAsset&id=${asset.id}`;
+                    });
                 });
+
             });
         });
 }

@@ -24,14 +24,20 @@ class MapView extends View
                 }
                 label {
                     display: flex;
+                    justify-content: center;
                 }
                 form {
                     display: flex;
+                    justify-content: center;
+                }
+                h2 {
+                    display: flex;
+                    justify-content: center;
                 }
             </style>
         </head>
         <body>
-            <h2>Google Map Centered on Iași, Romania</h2>
+            <h2>Real Estate Manager</h2>
             <label>
                 <input type="checkbox" id="pollution-toggle"> Show Pollution Layer
             </label>

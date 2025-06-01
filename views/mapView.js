@@ -186,6 +186,7 @@ function fetchPollutionData() {
 
                         const color = getPollutionColor(value);
 
+
                         const circle = new google.maps.Circle({
                             strokeColor: color,
                             strokeOpacity: 0.5,
@@ -198,6 +199,28 @@ function fetchPollutionData() {
                                 lng: entry.coordinates.longitude
                             },
                             radius: 1800
+                        });
+
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: `
+                                <div>
+                                    <strong>Rata de poluare:</strong> ${value}<br/>
+                                </div>
+                            `
+                        });
+
+                        const position = {
+                                lat: entry.coordinates.latitude,
+                                lng: entry.coordinates.longitude
+                            }
+
+                        circle.addListener("mouseover", function () {
+                            infoWindow.setPosition(position);
+                            infoWindow.open(map);
+                        });
+
+                        circle.addListener("mouseout", function () {
+                            infoWindow.close();
                         });
 
                         pollutionCircles.push(circle);

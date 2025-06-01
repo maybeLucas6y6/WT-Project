@@ -28,6 +28,10 @@ class MapController extends Controller
                 $this->respondJSON($this->model->getSensorData($id));
                 break;
 
+            case 'asset':
+                $this->respondJSON($this->model->getAssets());
+                break;
+
             default:
                 http_response_code(400);
                 echo json_encode(['error' => 'Invalid action']);

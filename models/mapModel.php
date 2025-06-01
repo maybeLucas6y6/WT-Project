@@ -3,8 +3,14 @@
 
 class MapModel
 {
+    private $connection;
     private $apiKey = 'af8f7c1e20b6fc5ef42bde8834f8a7c174492b710040beaf5404f5f25cbbc46a';
     //self explanatory, request-uri in php normale
+
+
+    public function __construct() {
+        $this->connection = Database::getInstance()->getConnection();
+    }
     public function getPollutionData($lat, $lng, $radius, $limit)
     {
         $url = "https://api.openaq.org/v3/locations?coordinates={$lat},{$lng}&radius={$radius}&limit={$limit}";
@@ -34,5 +40,20 @@ class MapModel
         }
 
         return json_decode($response, true);
+    }
+
+    public function getAssets(){
+        $sql = "SELECT * FROM assets";
+        $result = pg_query($this->connection, $sql);
+
+        if(!$result) {
+            return ["error" => "failed"];
+        }
+
+        $assets = [];
+        while ($row = pg_fetch_assoc($result)) {
+            $assets[] = $row;
+        }
+        return $assets;
     }
 }

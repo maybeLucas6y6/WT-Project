@@ -1,10 +1,9 @@
 let map;
 let pollutionCircles = [];
-
+let geocoder;
 function initMap() { //logica efectiva pt harta (trebuie musai js)
-    const geocoder = new google.maps.Geocoder();
     const address = "Iasi, Romania";
-
+    geocoder = new google.maps.Geocoder();
     //eu ii dau o adresa normala, pe care apoi o geocodez in lat si lng ca sa pot sa o dau la google
     geocoder.geocode({ address: address }, function (results, status) {
         if (status === 'OK') {
@@ -13,14 +12,13 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
                 center: results[0].geometry.location
             });
 
-            new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
+            fetchAssets();
         } else {
             alert('Geocode failed: ' + status);
         }
     });
+
+
     //Astept sa vad daca trebuie randat overlay ul de poluare
     document.getElementById("pollution-toggle").addEventListener("change", function () {
         if (this.checked) {
@@ -29,6 +27,24 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
             clearPollutionLayer();
         }
     });
+}
+
+function fetchAssets(){
+    console.log("Fetching assets...");
+
+    fetch("index.php?action=asset")
+        .then(res => res.json())
+        .then(data => {
+            console.log("data received:", data);
+            data.forEach(asset => {
+                geocoder.geocode({address : asset.address}, function(results, status) {
+                    new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                });
+            });
+        });
 }
 // fac un apel AJAX la index.php, care apoi merge la model, and so on, pana cand am la final toate cercurile randate
 function fetchPollutionData() {
@@ -59,7 +75,7 @@ function fetchPollutionData() {
 
                         const circle = new google.maps.Circle({
                             strokeColor: color,
-                            strokeOpacity: 0.8,
+                            strokeOpacity: 0.5,
                             strokeWeight: 1,
                             fillColor: color,
                             fillOpacity: 0.35,

@@ -7,7 +7,7 @@ class MapController extends Controller
     public function __construct()
     {
         $this->model = new MapModel();
-        $this->view = new MapView('AIzaSyDQz3eIc4qVe1iNkZaehSEz94GhJRxkPP0');
+        $this->view = new MapView('nope');
     }
 
     public function handleRequest()

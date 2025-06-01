@@ -16,7 +16,7 @@ if (isset($_GET['action'])) {
         $controller->handleRequest();
     }
 } else {
-    $googleMapsApiKey = 'AIzaSyDQz3eIc4qVe1iNkZaehSEz94GhJRxkPP0'; 
+    $googleMapsApiKey = 'nope'; 
     $view = new MapView($googleMapsApiKey);
     $view->render();
 }

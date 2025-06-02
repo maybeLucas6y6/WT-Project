@@ -12,15 +12,15 @@ class MapController extends Controller {
         // echo "Handling request for action: {$this->action}<br />";
         switch ($this->action) {
             case 'pollution':
-                $lat = $_GET['lat'] ?? 40;
-                $lng = $_GET['lng'] ?? 40;
-                $radius = $_GET['radius'] ?? 10000;
-                $limit = $_GET['limit'] ?? 50;
+                $lat = $this->params[0] ?? 40;
+                $lng = $this->params[1] ?? 40;
+                $radius = $this->params[2] ?? 10000;
+                $limit = $this->params[3] ?? 50;
                 $this->respondJSON($this->model->getPollutionData($lat, $lng, $radius, $limit));
                 break;
 
             case 'sensor': // sensor tot OpenAq, tot la model
-                $id = $_GET['id'] ?? null;
+                $id = $this->params[0] ?? null;
                 $this->respondJSON($this->model->getSensorData($id));
                 break;
 
@@ -29,15 +29,15 @@ class MapController extends Controller {
                 break;
 
             case 'addAsset':
-                $description = $_POST['description'] ?? null;
-                $address = $_POST['address'] ?? null;
-                $price = $_POST['price'] ?? null;
+                $description = $this->params[0] ?? null;
+                $address = $this->params[1] ?? null;
+                $price = $this->params[2] ?? null;
                 $this->respondJSON($this->model->addAsset($description, $address, $price));
                 break;
 
             case 'temperature':
-                $lat = $_GET['lat'] ?? null;
-                $lng = $_GET['lng'] ?? null;
+                $lat = $this->params[0] ?? null;
+                $lng = $this->params[1] ?? null;
                 $this->respondJSON($this->model->getTemperatureData($lat, $lng));
                 break;
                 

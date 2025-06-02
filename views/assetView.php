@@ -18,7 +18,7 @@ class AssetView {
         echo "<p><strong>Address:</strong> {$this->asset['address']}</p>";
         echo "<p><strong>Description:</strong> {$this->asset['description']}</p>";
         echo "<p><strong>Price:</strong> {$this->asset['price']}</p>";
-        echo "<a href='index.php'>Back to map</a>";
+        echo "<a href='/map'>Back to map</a>";
         echo "</body></html>";
     }
 }

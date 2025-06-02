@@ -53,18 +53,22 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
             geocoder.geocode({address: address}, function(results, status) {
                 if(status === 'OK' ) {
                     //e valida adresa, o bagam si ii facem marker.
-                    const formData = new FormData(e.target);
+                    
 
-                    fetch('index.php?action=addAsset', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        title: address.concat('\n').concat(document.getElementById("description").value)
-                    });
+                    fetch(`map/addAsset/${description}/${address}/${price}`)
+                        .then(res => res.json())
+                        .then(asset => {
+                            console.log(asset.id);
+                            const marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location,
+                                title: address.concat('\n').concat(document.getElementById("description").value)
+                            });
+                            marker.addListener("click", function () {
+                                window.location.href = `/asset/viewAsset/${asset.id}`;
+                            });
+                        });
+                    
                 }
                 else {
                     alert("Adresa invalida! Incercati din nou cu o adresa de pe Google Maps.");
@@ -80,7 +84,7 @@ function fetchTempData(){
     const lat = center.lat();
     const lng = center.lng();
 
-    fetch(`index.php?action=temperature&lat=${lat}&lng=${lng}`)
+    fetch(`map/temperature/${lat}/${lng}`)
         .then(res => res.json())
         .then(data => {
             console.log("Data received: ", data);
@@ -144,7 +148,7 @@ function clearTempLayer(){
 function fetchAssets(){
     console.log("Fetching assets...");
 
-    fetch("index.php?action=asset")
+    fetch("map/asset")
         .then(res => res.json())
         .then(data => {
             console.log("data received:", data);
@@ -156,7 +160,7 @@ function fetchAssets(){
                         title: asset.address.concat('\n').concat(asset.description) 
                     });
                     marker.addListener("click", function () {
-                        window.location.href = `index.php?action=viewAsset&id=${asset.id}`;
+                        window.location.href = `/asset/viewAsset/${asset.id}`;
                     });
                 });
 
@@ -171,7 +175,7 @@ function fetchPollutionData() {
 
     console.log("Fetching pollution data for:", lat, lng);
 
-    fetch(`index.php?action=pollution&lat=${lat}&lng=${lng}&radius=10000&limit=50`)
+    fetch(`map/pollution/${lat}/${lng}/10000/50`)
         .then(res => res.json())
         .then(data => {
             const results = data.results;
@@ -182,7 +186,7 @@ function fetchPollutionData() {
 
                 const sensorId = sensor.id;
 
-                fetch(`index.php?action=sensor&id=${sensorId}`)
+                fetch(`map/sensor/${sensorId}`)
                     .then(res => res.json())
                     .then(measurementData => {
                         const value = measurementData.results[0].value;

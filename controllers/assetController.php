@@ -7,6 +7,18 @@ class assetController extends Controller{
         parent::__construct($action, $params, $model, $view);
     }
 
+    private function handleRequest(){
+        switch ($this->action) {
+            case "viewAsset":
+                $this->viewAsset($this->params[0]);
+                break;
+        }
+    }
+
+    public function render() {
+        $this->handleRequest();
+    }
+
     public function viewAsset($id) {
         $asset = $this->model->getAssetById($id);
 

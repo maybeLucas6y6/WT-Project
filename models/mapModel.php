@@ -3,7 +3,7 @@
 class MapModel
 {
     private $connection;
-    private $apiKeyPollution;
+    private $apiKeyPollution = "nope";
 
     public function __construct()
     {
@@ -30,15 +30,25 @@ class MapModel
 
     public function addAsset($description, $address, $price)
     {
-        $description = pg_escape_string($this->connection, $description);
-        $address = pg_escape_string($this->connection, $address);
+        $description = pg_escape_string($this->connection, urldecode($description));
+        $address = pg_escape_string($this->connection, urldecode($address));
         $price = floatval($price);
-        $sql = "INSERT INTO assets (description, address, price) VALUES ('$description', '$address', $price)";
+        $insertSql = "INSERT INTO assets (description, address, price) VALUES ('$description', '$address', $price)";
+        $insertResult = pg_query($this->connection, $insertSql);
+
+        if (!$insertResult) {
+            return (["error" => "Insert failed"]);
+        }
+
+        $sql = "SELECT id FROM assets WHERE description = '$description' AND address = '$address' AND price = $price";
         $result = pg_query($this->connection, $sql);
+
 
         if (!$result) {
             return ["error" => "failed"];
-        } else return ["ok" => "success"];
+        }
+        $id = pg_fetch_row($result);
+        return ["id" => $id[0]];
     }
 
     private function makeRequest($url)

@@ -1,16 +1,14 @@
 <?php
 
-
 class MapModel
 {
     private $connection;
-    private $apiKeyPollution = 'nope';
-    //self explanatory, request-uri in php normale
-
+    private $apiKeyPollution;
 
     public function __construct() {
         $this->connection = Database::getInstance()->getConnection();
     }
+
     public function getPollutionData($lat, $lng, $radius, $limit)
     {
         $url = "https://api.openaq.org/v3/locations?coordinates={$lat},{$lng}&radius={$radius}&limit={$limit}";

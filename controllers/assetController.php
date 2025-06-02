@@ -1,11 +1,10 @@
 <?php
 
 class assetController extends Controller{
-    public $model;
-    public $view;
-
-    public function __construct(){
-        parent::__construct();
+    public function __construct($action, $params) {
+        $model = new assetModel();
+        $view = new assetView();
+        parent::__construct($action, $params, $model, $view);
     }
 
     public function viewAsset($id) {

@@ -1,15 +1,17 @@
 <?php
-abstract class Controller
-{
+
+abstract class Controller {
     protected $model;
     protected $view;
+    protected $action;
+    protected $params;
 
-    public function __construct()
-    {   //deci caut in numele clasei "Controller" si apoi il inlocuiesc cu Model (e.g. UserController -> UserModel)
-        $numeModel = str_replace("Controller", "Model", get_class($this));
-        $this->model = new $numeModel;
-        //idem
-        $numeView = str_replace("Controller","View", get_class($this));
-        $this->view = new $numeView;
+    public function __construct($action, $params, $model, $view) {
+        $this->action = $action;
+        $this->params = $params;
+        $this->model = $model;
+        $this->view = $view;
     }
+
+    public function render() {}
 }

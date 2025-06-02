@@ -1,22 +1,21 @@
 <?php
 
+// require __DIR__ . '/vendor/autoload.php';
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
-define ('SLASH', DIRECTORY_SEPARATOR);
-define ('DIRECTOR_SITE', dirname(__FILE__));
-require_once 'autoloader/autoloader.php';
+// echo $_ENV['GOOGLE_MAPS_API_KEY'];
 
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
+require_once 'autoload.php';
 
-    if ($action === 'viewAsset' && isset($_GET['id'])) {
-        $controller = new AssetController();
-        $controller->viewAsset($_GET['id']);
-    } else {
-        $controller = new MapController();
-        $controller->handleRequest();
-    }
-} else {
-    $googleMapsApiKey = 'nope'; 
-    $view = new MapView($googleMapsApiKey);
-    $view->render();
-}
+$request = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+$parts = explode('/', $request);
+
+$controller = !empty($parts[0]) ? $parts[0] : 'auth';
+$action = $parts[1] ?? 'status';
+$params = count($parts) > 2 ? array_slice($parts, 2) : [];
+
+$controllerClass = ucfirst($controller) . 'Controller';
+
+$controller = new $controllerClass($action, $params);
+$controller->render();

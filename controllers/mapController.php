@@ -1,23 +1,19 @@
 <?php
 
-class MapController extends Controller
-{
-    protected $model;
-    protected $view;
-    public function __construct()
-    {
-        $this->model = new MapModel();
-        $this->view = new MapView('nope');
+class MapController extends Controller {
+    public function __construct($action, $params) {
+        $model = new MapModel();
+        $view = new MapView();
+        parent::__construct($action, $params, $model, $view);
     }
 
     public function handleRequest()
-    {//eu primesc de la index o actiune, in functie de ce se intampla in scriptul de js
-        $action = $_GET['action'] ?? null;
-
-        switch ($action) { // daca trebuie datele de polutie, fac o cerere de la model, care face un api call la OpenAq
+    {
+        // echo "Handling request for action: {$this->action}<br />";
+        switch ($this->action) {
             case 'pollution':
-                $lat = $_GET['lat'] ?? null;
-                $lng = $_GET['lng'] ?? null;
+                $lat = $_GET['lat'] ?? 40;
+                $lng = $_GET['lng'] ?? 40;
                 $radius = $_GET['radius'] ?? 10000;
                 $limit = $_GET['limit'] ?? 50;
                 $this->respondJSON($this->model->getPollutionData($lat, $lng, $radius, $limit));
@@ -46,15 +42,20 @@ class MapController extends Controller
                 break;
                 
             default:
-                http_response_code(400);
-                echo json_encode(['error' => 'Invalid action']);
+                // Default action, render the map view
+                $this->view->render();
+                break;
         }
     }
 
     private function respondJSON($data)
-    {//trimite raspunsul inapoi la js
+    {
         header("Content-Type: application/json");
         header("Access-Control-Allow-Origin: *");
         echo json_encode($data);
+    }
+
+    public function render() {
+        $this->handleRequest();
     }
 }

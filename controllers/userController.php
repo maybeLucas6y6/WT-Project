@@ -1,8 +1,9 @@
 <?php
 
-class userController extends Controller{
-    public function __construct(){
-        parent::__construct();
-        echo "test";
+class UserController extends Controller {
+    public function __construct($action, $params) {
+        $model = new UserModel();
+        $view = new UserView();
+        parent::__construct($action, $params, $model, $view);
     }
 }

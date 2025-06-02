@@ -3,11 +3,9 @@
 
 class MapView extends View
 {
-    private $googleMapsApiKey;
+    private $googleMapsApiKey = 'nope';
 
-    public function __construct($googleMapsApiKey)
-    {
-        $this->googleMapsApiKey = $googleMapsApiKey;
+    public function __construct() {
     }
 
     public function render()

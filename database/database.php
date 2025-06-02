@@ -1,5 +1,6 @@
 <?php
-class Database {
+class Database
+{
     private static $instance = null;
     private $host = "nope";
     private $port = "5432";
@@ -8,7 +9,8 @@ class Database {
     private $password = "postgres";
     private $connection;
 
-    private function __construct() {
+    private function __construct()
+    {
         $connString = "host={$this->host} port={$this->port} dbname={$this->dbname} user={$this->user} password={$this->password}";
         $this->connection = pg_connect($connString);
 
@@ -17,22 +19,24 @@ class Database {
         }
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance === null) {
             self::$instance = new Database();
         }
         return self::$instance;
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->connection;
     }
 
 
-    public function __destruct() {
+    public function __destruct()
+    {
         if ($this->connection) {
             pg_close($this->connection);
         }
     }
 }
-?>

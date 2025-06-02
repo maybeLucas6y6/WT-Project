@@ -1,7 +1,5 @@
 <?php
 
-define('SLASH', DIRECTORY_SEPARATOR);
-
 function autoload($class) {
     // echo "Searching for $class<br/>";
     foreach (['controllers', 'models', 'views', 'database'] as $folder) {

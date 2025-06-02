@@ -5,14 +5,14 @@ class MapView extends View
 {
     private $googleMapsApiKey = 'nope';
 
-    public function __construct() {
-    }
+    public function __construct() {}
 
-    public function render()
+    public function render($args)
     {
-        ?>
+?>
         <!DOCTYPE html>
         <html>
+
         <head>
             <title>Google Map - Iași, Romania</title>
             <style>
@@ -20,20 +20,24 @@ class MapView extends View
                     height: 800px;
                     width: 100%;
                 }
+
                 label {
                     display: flex;
                     justify-content: center;
                 }
+
                 form {
                     display: flex;
                     justify-content: center;
                 }
+
                 h2 {
                     display: flex;
                     justify-content: center;
                 }
             </style>
         </head>
+
         <body>
             <h2>Real Estate Manager</h2>
             <label>
@@ -53,13 +57,14 @@ class MapView extends View
             </form>
             <div id="map"></div>
 
-        <script src="views/mapView.js"></script>
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->googleMapsApiKey; ?>&libraries=visualization&callback=initMap">
-        </script>
+            <script src="views/mapView.js"></script>
+            <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->googleMapsApiKey; ?>&libraries=visualization&callback=initMap">
+            </script>
 
         </body>
+
         </html>
-        <?php
+<?php
     }
 }

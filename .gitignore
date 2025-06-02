@@ -1,2 +1,4 @@
 .env
 vendor
+cache
+templates_c

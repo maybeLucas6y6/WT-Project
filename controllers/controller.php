@@ -13,5 +13,5 @@ abstract class Controller {
         $this->view = $view;
     }
 
-    public function render() {}
+    public abstract function render();
 }

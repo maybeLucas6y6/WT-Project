@@ -71,7 +71,7 @@ class AuthController extends Controller
                     'samesite' => 'Lax'
                 ]);
 
-                jumpTo('/home');
+                jumpTo('/map');
             } else {
                 $this->view->setTemplate('error');
                 $this->view->assign('error', 'Invalid action specified.');

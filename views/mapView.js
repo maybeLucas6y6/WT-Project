@@ -1,5 +1,6 @@
 let map;
 let pollutionCircles = [];
+let markers = []
 let geocoder;
 let heatmap = null;
 let temperatureCircles = [];
@@ -31,19 +32,132 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
         }
     });
 
-        document.getElementById("heatmap-toggle").addEventListener("change", function () {
+    document.getElementById("heatmap-toggle").addEventListener("change", function () {
         if (this.checked) {
             fetchTempData();
         } else {
             clearTempLayer();
         }
     });
+    
+    document.getElementById("favorite-toggle").addEventListener("change", function () {
+        if (this.checked) {
+            clearMarkers();
+            fetchFavoriteAssets();
+        } else {
+            clearMarkers();
+            fetchAssets();
+        }
+    });
+    document.getElementById("add-asset-form").addEventListener("submit", handleAssetFormSubmit);
+    document.getElementById("filter-form").addEventListener("submit", handleFilterFormSubmit);
+    document.getElementById("nearby-form").addEventListener("submit", handleNearbyFormSubmit);
+}
 
-    document.getElementById("add-asset-form").addEventListener("submit", function(e) {
+function handleNearbyFormSubmit(e) {
+    e.preventDefault();
+    const address = document.getElementById("nearby-address").value;
+
+    if(!address){
+        alert("Va rog sa completati campul.")
+    }
+    else{
+        geocoder.geocode({address: address}, function(results, status) {
+            if(status === 'OK'){
+            fetch(`/map/fetchNearbyAssets/${results[0].geometry.location.lat()}/${results[0].geometry.location.lng()}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    clearMarkers();
+                    data.forEach(asset => {
+                        const lat = parseFloat(asset.lat);
+                        const lng = parseFloat(asset.long);
+                        const id = parseInt(asset.id);
+                        const marker = new google.maps.Marker({
+                            map: map,
+                            position: {lat: lat, lng: lng},
+                            title: `${asset.address}\n${asset.description}`
+                        });
+
+                        marker.addListener("click", function () {
+                            window.location.href = `/asset/viewAsset/${id}`;
+                        });
+
+                        markers.push(marker);
+                    });
+                })
+            }
+            else{
+                alert("Va rog introduceti o adresa valida");
+            }
+        })
+    }
+}
+
+function fetchFavoriteAssets(){
+
+    fetch(`map/fetchFavoriteAssets`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            data.forEach(asset => {
+                const lat = parseFloat(asset.lat);
+                const lng = parseFloat(asset.long);
+                const id = parseInt(asset.id);
+                const marker = new google.maps.Marker({
+                    map: map,
+                    position: {lat: lat, lng: lng},
+                    title: `${asset.address}\n${asset.description}`
+                });
+
+                marker.addListener("click", function () {
+                    window.location.href = `/asset/viewAsset/${id}`;
+                });
+
+                markers.push(marker);
+            })
+        })
+}
+
+function handleFilterFormSubmit(e){
+    e.preventDefault();
+    const minValue = document.getElementById("min-price").value || -1;
+    const maxValue = document.getElementById("max-price").value ||  Number.MAX_VALUE;
+
+    fetch(`map/filterAssets/${minValue}/${maxValue}`)
+        .then(res=>res.json())
+        .then(data => {
+            clearMarkers();
+            data.forEach(asset => {
+                const lat = parseFloat(asset.lat);
+                const lng = parseFloat(asset.long);
+                const id = parseInt(asset.id);
+                const marker = new google.maps.Marker({
+                    map: map,
+                    position: {lat: lat, lng: lng},
+                    title: `${asset.address}\n${asset.description}`
+                });
+
+                marker.addListener("click", function () {
+                    window.location.href = `/asset/viewAsset/${id}`;
+                });
+
+                markers.push(marker);
+            })
+        });
+}
+
+function clearMarkers(){
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+}
+
+function handleAssetFormSubmit(e){
         e.preventDefault();
         const address = document.getElementById("address").value;
         const description = document.getElementById("description").value;
         const price = document.getElementById("price").value;
+        const category = document.getElementById("category").value;
         //Trebuie pus ceva in fiecare camp, ca sa nu bubuie baza de date.
         if(!address || !description || !price){
             alert("Completati toate campurile.");
@@ -53,9 +167,7 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
             geocoder.geocode({address: address}, function(results, status) {
                 if(status === 'OK' ) {
                     //e valida adresa, o bagam si ii facem marker.
-                    
-
-                    fetch(`map/addAsset/${description}/${address}/${price}`)
+                    fetch(`map/addAsset/${description}/${address}/${price}/${results[0].geometry.location.lat()}/${results[0].geometry.location.lng()}/${category}`)
                         .then(res => res.json())
                         .then(asset => {
                             console.log(asset.id);
@@ -67,6 +179,7 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
                             marker.addListener("click", function () {
                                 window.location.href = `/asset/viewAsset/${asset.id}`;
                             });
+                            markers.push(marker);
                         });
                     
                 }
@@ -75,8 +188,9 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
                 }
             })
         }
-    })
-}
+    }
+
+
 
 function fetchTempData(){
     console.log("Fetching temp data...");
@@ -153,16 +267,19 @@ function fetchAssets(){
         .then(data => {
             console.log("data received:", data);
             data.forEach(asset => {
-                geocoder.geocode({address : asset.address}, function(results, status) {
+                const lat = parseFloat(asset.lat);
+                const lng = parseFloat(asset.long);
+                const id = parseInt(asset.id);
                     const marker = new google.maps.Marker({
                         map: map,
-                        position: results[0].geometry.location,
+                        position:  {lat: lat, lng: lng},
                         title: asset.address.concat('\n').concat(asset.description) 
                     });
                     marker.addListener("click", function () {
-                        window.location.href = `/asset/viewAsset/${asset.id}`;
+                        window.location.href = `/asset/viewAsset/${id}`;
                     });
-                });
+                    markers.push(marker);
+
 
             });
         });

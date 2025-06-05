@@ -21,7 +21,7 @@ class HomeController extends Controller
     public function render()
     {
         $user = $this->authMiddleware->getAuthenticatedUser();
-
+        echo $user['id'];
         $this->view->render('TODO');
     }
 }

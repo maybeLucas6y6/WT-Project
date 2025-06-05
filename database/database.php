@@ -2,7 +2,7 @@
 class Database
 {
     private static $instance = null;
-    private $host = "nope";
+    private $host = "database-2.ctigssii84mr.eu-north-1.rds.amazonaws.com";
     private $port = "5432";
     private $dbname = "TW_Project";
     private $user = "postgres";

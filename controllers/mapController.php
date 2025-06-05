@@ -1,7 +1,14 @@
 <?php
 
 class MapController extends Controller {
+    private $authMiddleware;
     public function __construct($action, $params) {
+        $this->authMiddleware = new AuthMiddleware();
+
+        // Require authentication for all actions in this controller
+        if (!$this->authMiddleware->requireAuth()) {
+            return;
+        }
         $model = new MapModel();
         $view = new MapView();
         parent::__construct($action, $params, $model, $view);
@@ -32,7 +39,11 @@ class MapController extends Controller {
                 $description = $this->params[0] ?? null;
                 $address = $this->params[1] ?? null;
                 $price = $this->params[2] ?? null;
-                $this->respondJSON($this->model->addAsset($description, $address, $price));
+                $lat = $this->params[3] ?? null;
+                $lng = $this->params[4] ?? null;
+                $category = $this->params[5] ?? null;
+                $user = $this->authMiddleware->getAuthenticatedUser();
+                $this->respondJSON($this->model->addAsset($description, $address, $price, $lat, $lng, $user['id'],$category));
                 break;
 
             case 'temperature':
@@ -40,10 +51,27 @@ class MapController extends Controller {
                 $lng = $this->params[1] ?? null;
                 $this->respondJSON($this->model->getTemperatureData($lat, $lng));
                 break;
-                
+
+            case 'filterAssets':
+                $min_value = $this->params[0] ?? null;
+                $max_value = $this->params[1] ?? null;
+                $this->respondJSON($this->model->filterAssets($min_value, $max_value));
+                break;  
+            
+            case 'fetchFavoriteAssets':
+                $user = $this->authMiddleware->getAuthenticatedUser();
+                $this->respondJSON($this->model->fetchFavoriteAssets($user['id']));
+                break;
+
+            case 'fetchNearbyAssets':
+                $lat = $this->params[0] ?? null;
+                $lng = $this->params[1] ?? null;
+                $this->respondJSON($this->model->fetchNearbyAssets($lat, $lng));
+                break;
+
             default:
                 // Default action, render the map view
-                $this->view->render();
+                $this->view->render([]);
                 break;
         }
     }

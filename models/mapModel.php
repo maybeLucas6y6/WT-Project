@@ -3,7 +3,7 @@
 class MapModel
 {
     private $connection;
-    private $apiKeyPollution = "nope";
+    private $apiKeyPollution = "d1b3886d56be0912467e900b41076df55892f7a3c3cb8fed6e6fcec0e93b091a";
 
     public function __construct()
     {
@@ -28,21 +28,73 @@ class MapModel
         return $this->makeRequest($url);
     }
 
-    public function addAsset($description, $address, $price)
+    public function updateAssetPos($id, $lat, $lng){
+        $sql = "SELECT update_asset_location($id, $lat, $lng)";
+
+        $result = pg_query($this->connection, $sql);
+
+        if ($result) {
+            return (["ok" => "Insert succeded"]);
+        } else {
+            return (["error" => "Insert failed"]);
+        }
+    }
+
+    public function filterAssets($min_value, $max_value) {
+        $sql = "SELECT * from filter_assets_by_price($min_value, $max_value)";
+
+        $result = pg_query($this->connection, $sql);
+
+        if(!$result){
+            return ["error"=> "failed"];
+        } else{
+            $assets = [];
+            while ($row = pg_fetch_assoc($result)) {
+                $assets[] = $row;
+            }
+            return $assets;
+        }
+    }
+
+    public function fetchFavoriteAssets($id){
+        $sql = "SELECT * FROM get_favorite_assets($id)";
+        $result = pg_query($this->connection, $sql);
+
+        if(!$result){
+            return ["error"=> "failed"];
+        } else{
+            $assets = [];
+            while ($row = pg_fetch_assoc($result)) {
+                $assets[] = $row;
+            }
+            return $assets;
+        }
+    }
+
+    public function fetchNearbyAssets($lat, $lng) {
+        $sql = "SELECT * FROM get_assets_within_distance(1,$lat, $lng)";
+        $result = pg_query($this->connection, $sql);
+        if(!$result) {
+            return ["error"=> "failed"];
+        }
+        else{
+            $assets = [];
+            while ($row = pg_fetch_assoc($result)) {
+                $assets[] = $row;
+            }
+            return $assets;
+        }
+    }
+    public function addAsset($description, $address, $price, $lat, $lng,  $id, $category)
     {
         $description = pg_escape_string($this->connection, urldecode($description));
         $address = pg_escape_string($this->connection, urldecode($address));
         $price = floatval($price);
-        $insertSql = "INSERT INTO assets (description, address, price) VALUES ('$description', '$address', $price)";
-        $insertResult = pg_query($this->connection, $insertSql);
-
-        if (!$insertResult) {
-            return (["error" => "Insert failed"]);
-        }
-
-        $sql = "SELECT id FROM assets WHERE description = '$description' AND address = '$address' AND price = $price";
+        $lat = floatval($lat);
+        $lng = floatval($lng);
+        $category = pg_escape_string($this->connection, urldecode($category));
+        $sql = "select * from add_asset_with_category('$description','$address',$price,$lat,$lng,$id,'$category')";
         $result = pg_query($this->connection, $sql);
-
 
         if (!$result) {
             return ["error" => "failed"];

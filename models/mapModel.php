@@ -102,6 +102,41 @@ class MapModel
         return ["id" => $id[0]];
     }
 
+    public function exportAssetsJSON(){
+        header('Content-Type: application/json');
+        header('Content-Disposition: attachment; filename="export.json"');
+
+        $sql = "SELECT * FROM assets";
+        $result = pg_query($this->connection, $sql);
+
+        if (!$result) {
+            return ["error" => "failed"];
+        }
+
+        $assets = [];
+        while ($row = pg_fetch_assoc($result)) {
+            $assets[] = $row;
+        }
+        echo json_encode($assets, JSON_PRETTY_PRINT);
+    }
+
+    public function exportAssetsCSV(){
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=export.csv');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['id', 'address', 'description', 'price', 'lat', 'long', 'user_id']);
+
+        $sql = "SELECT * FROM assets";
+        $result = pg_query($this->connection, $sql);
+
+        while ($row = pg_fetch_assoc($result)) {
+            fputcsv($output, $row);
+        }
+
+        fclose($output);
+    }
+
     private function makeRequest($url)
     {
         $opts = [

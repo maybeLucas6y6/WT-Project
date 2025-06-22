@@ -52,6 +52,16 @@ function initMap() { //logica efectiva pt harta (trebuie musai js)
     document.getElementById("add-asset-form").addEventListener("submit", handleAssetFormSubmit);
     document.getElementById("filter-form").addEventListener("submit", handleFilterFormSubmit);
     document.getElementById("nearby-form").addEventListener("submit", handleNearbyFormSubmit);
+    document.getElementById("JSON-button").addEventListener("click", handleJSONButtonClick);
+    document.getElementById("CSV-button").addEventListener("click", handleCSVButtonClick);
+}
+
+function handleCSVButtonClick(){
+    window.location.href = '/map/getCSV';
+}
+
+function handleJSONButtonClick(){
+    window.location.href = '/map/getJSON';
 }
 
 function handleNearbyFormSubmit(e) {

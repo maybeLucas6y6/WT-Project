@@ -69,6 +69,14 @@ class MapController extends Controller {
                 $this->respondJSON($this->model->fetchNearbyAssets($lat, $lng));
                 break;
 
+            case 'getJSON':
+                $this->model->exportAssetsJSON();
+                break;
+
+            case 'getCSV':
+                $this->model->exportAssetsCSV();
+                break;
+
             default:
                 // Default action, render the map view
                 $this->view->setTemplate("map");

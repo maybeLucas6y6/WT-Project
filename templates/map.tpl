@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-        
-        <head>
-            <title>Google Map - Iași, Romania</title>
-            <link rel="stylesheet" href="/views/mapView.css">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta name="description" content="Real estate manager for people looking to buy and sell estates.">
-        </head>
-        <body>
-            <div id="big-wrapper">
-            <h2>Real Estate Manager</h2>
-            <label>
-                <input type="checkbox" id="pollution-toggle"> Arata grad poluare.
-            </label>
-            <label>
-                <input type="checkbox" id="heatmap-toggle"> Arata t.m.a.
-            </label>
-            <label>
-                <input type="checkbox" id="favorite-toggle"> Filtreaza dupa favorite.
-            </label>
-            <div id="map"></div>
 
-            <div id="form-wrapper">
+<head>
+    <title>Google Map - Iași, Romania</title>
+    <link rel="stylesheet" href="/views/mapView.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Real estate manager for people looking to buy and sell estates.">
+</head>
+
+<body>
+    <form action="/auth/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
+    <div id="big-wrapper">
+        <h2>Real Estate Manager</h2>
+        <label>
+            <input type="checkbox" id="pollution-toggle"> Arata grad poluare.
+        </label>
+        <label>
+            <input type="checkbox" id="heatmap-toggle"> Arata t.m.a.
+        </label>
+        <label>
+            <input type="checkbox" id="favorite-toggle"> Filtreaza dupa favorite.
+        </label>
+        <div id="map"></div>
+
+        <div id="form-wrapper">
             <div>
                 <button id="form-button" class="fancy-button">Adauga oferta</button>
             </div>
@@ -48,7 +53,7 @@
                     <option value="Office Space">Office Space</option>
                     <option value="Warehouse">Warehouse</option>
                 </select> <br>
-                
+
                 <input type="submit" value="Adaugare oferta">
             </form>
 
@@ -83,7 +88,7 @@
             <div>
                 <button class="fancy-button" id="CSV-button">Export ca si CSV</button>
             </div>
-            </div>
+        </div>
 
 
         <script src="views/mapView.js"></script>
@@ -92,20 +97,24 @@
         </script>
 
 
-         <script>
-            document.getElementById('form-button').addEventListener('click', function () {
+        <script>
+            document.getElementById('form-button').addEventListener('click', function() {
                 const form = document.getElementById('add-asset-form');
-                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' :
+                    'none';
             });
-            document.getElementById('filter-button').addEventListener('click', function () {
+            document.getElementById('filter-button').addEventListener('click', function() {
                 const form = document.getElementById('filter-form');
-                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' :
+                    'none';
             });
-            document.getElementById('nearby-button').addEventListener('click', function () {
+            document.getElementById('nearby-button').addEventListener('click', function() {
                 const form = document.getElementById('nearby-form');
-                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' :
+                    'none';
             });
         </script>
-        </div>
-        </body>
-        </html>
+    </div>
+</body>
+
+</html>

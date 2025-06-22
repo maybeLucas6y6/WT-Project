@@ -98,6 +98,7 @@ class AuthController extends Controller
             'iat' => time(),
             'exp' => time() + (60 * 60), // 1 hour
             'user_id' => $userId,
+            'admin' => $this->model->isUserAdmin($userId)
         ];
 
         return JWT::encode($payload, $this->key, 'HS256');
@@ -127,5 +128,22 @@ class AuthController extends Controller
         }
 
         return $this->model->getUserById($payload['user_id']);
+    }
+
+    public function isCurrentUserAdmin(): bool
+    {
+        $token = $_COOKIE['auth_token'] ?? null;
+
+        if (!$token) {
+            return false;
+        }
+
+        $payload = $this->verifyToken($token);
+
+        if (!$payload || $payload['exp'] < time()) {
+            return false;
+        }
+
+        return $payload['admin'] ?? false;
     }
 }

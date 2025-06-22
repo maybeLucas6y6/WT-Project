@@ -1,8 +1,10 @@
 <?php
 
-class MapController extends Controller {
+class MapController extends Controller
+{
     private $authMiddleware;
-    public function __construct($action, $params) {
+    public function __construct($action, $params)
+    {
         $this->authMiddleware = new AuthMiddleware();
 
         // Require authentication for all actions in this controller
@@ -43,7 +45,7 @@ class MapController extends Controller {
                 $lng = $this->params[4] ?? null;
                 $category = $this->params[5] ?? null;
                 $user = $this->authMiddleware->getAuthenticatedUser();
-                $this->respondJSON($this->model->addAsset($description, $address, $price, $lat, $lng, $user['id'],$category));
+                $this->respondJSON($this->model->addAsset($description, $address, $price, $lat, $lng, $user['id'], $category));
                 break;
 
             case 'temperature':
@@ -56,8 +58,8 @@ class MapController extends Controller {
                 $min_value = $this->params[0] ?? null;
                 $max_value = $this->params[1] ?? null;
                 $this->respondJSON($this->model->filterAssets($min_value, $max_value));
-                break;  
-            
+                break;
+
             case 'fetchFavoriteAssets':
                 $user = $this->authMiddleware->getAuthenticatedUser();
                 $this->respondJSON($this->model->fetchFavoriteAssets($user['id']));
@@ -80,7 +82,7 @@ class MapController extends Controller {
             default:
                 // Default action, render the map view
                 $this->view->setTemplate("map");
-                $this->view->render([]);
+                $this->view->render(['is_admin' => $this->authMiddleware->isCurrentUserAdmin()]);
                 break;
         }
     }
@@ -92,7 +94,8 @@ class MapController extends Controller {
         echo json_encode($data);
     }
 
-    public function render() {
+    public function render()
+    {
         $this->handleRequest();
     }
 }

@@ -66,4 +66,17 @@ class UserModel
             return null;
         }
     }
+
+    public function isUserAdmin($userId)
+    {
+        $query = 'SELECT is_admin FROM users WHERE id = $1';
+        $result = pg_query_params($this->db, $query, [$userId]);
+
+        if ($result && pg_num_rows($result) > 0) {
+            $user = pg_fetch_assoc($result);
+            return (bool)$user['is_admin'];
+        } else {
+            return false;
+        }
+    }
 }

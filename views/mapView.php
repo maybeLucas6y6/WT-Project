@@ -9,6 +9,7 @@ class MapView extends View
     {
         try {
             $this->smarty->assign("googleMapsApiKey", $this->googleMapsApiKey);
+            $this->smarty->assign("is_admin", $args['is_admin'] ?? false);
             $this->smarty->display($this->template . '.tpl');
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();

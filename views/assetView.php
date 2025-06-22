@@ -1,45 +1,23 @@
 <?php
 
-class AssetView {
+class AssetView extends View{
     private $asset;
 
-    public function __construct() {
-
-    }
 
     public function initAsset($asset){
         $this->asset = $asset;
     }
 
-    public function render() {
-        ?>
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Asset Details</title>
-            <link rel="stylesheet" href="/views/mapView.css">
-        </head>
-        <body>
-            <div id="big-wrapper">
-                <h1>Asset Details</h1>
-                <p><strong>Address:</strong> <?= htmlspecialchars($this->asset['address']) ?></p>
-                <p><strong>Description:</strong> <?= htmlspecialchars($this->asset['description']) ?></p>
-                <p><strong>Price:</strong> <?= htmlspecialchars($this->asset['price']) ?></p>
-                
-                <a href="/map" class="fancy-button">Inapoi catre harta</a>
-                <div id="small-wrapper">
-                    <button id="add-to-favorites-button" class="fancy-button" data-asset-id="<?= htmlspecialchars($this->asset['id']) ?>">Adaugati la favorite</button>
-                    <button id="remove-from-favorites-button" class="fancy-button" data-asset-id="<?= htmlspecialchars($this->asset['id']) ?>">Stergeti din favorite</button>
-                </div>
-            </div>
-
-            <script src="/views/assetView.js"></script>
-
-        </body>
- 
-        </html>
-
-        <?php
+    public function render($args) {
+        try {
+            $this->smarty->assign("address", $this->asset['address']);
+            $this->smarty->assign("description", $this->asset['description']);
+            $this->smarty->assign("price", $this->asset['price']);
+            $this->smarty->assign("id", $this->asset['id']);
+            $this->smarty->display($this->template . '.tpl');
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
     }
     //Trebuie schimbat cu smarty
 }

@@ -29,9 +29,8 @@ class MapModel
     }
 
     public function updateAssetPos($id, $lat, $lng){
-        $sql = "SELECT update_asset_location($id, $lat, $lng)";
-
-        $result = pg_query($this->connection, $sql);
+        $sql = "SELECT update_asset_location($1, $2, $3)";
+        $result = pg_query_params($this->connection, $sql, [$id, $lat, $lng]);
 
         if ($result) {
             return (["ok" => "Insert succeded"]);
@@ -41,9 +40,9 @@ class MapModel
     }
 
     public function filterAssets($min_value, $max_value) {
-        $sql = "SELECT * from filter_assets_by_price($min_value, $max_value)";
+        $sql = "SELECT * from filter_assets_by_price($1, $2)";
 
-        $result = pg_query($this->connection, $sql);
+        $result = pg_query_params($this->connection, $sql, [$min_value, $max_value]);
 
         if(!$result){
             return ["error"=> "failed"];
@@ -57,8 +56,8 @@ class MapModel
     }
 
     public function fetchFavoriteAssets($id){
-        $sql = "SELECT * FROM get_favorite_assets($id)";
-        $result = pg_query($this->connection, $sql);
+        $sql = "SELECT * FROM get_favorite_assets($1)";
+        $result = pg_query_params($this->connection, $sql, [$id]);
 
         if(!$result){
             return ["error"=> "failed"];
@@ -72,8 +71,8 @@ class MapModel
     }
 
     public function fetchNearbyAssets($lat, $lng) {
-        $sql = "SELECT * FROM get_assets_within_distance(1,$lat, $lng)";
-        $result = pg_query($this->connection, $sql);
+        $sql = "SELECT * FROM get_assets_within_distance(1,$1, $2)";
+        $result = pg_query_params($this->connection, $sql, [$lat, $lng]);
         if(!$result) {
             return ["error"=> "failed"];
         }
@@ -87,14 +86,14 @@ class MapModel
     }
     public function addAsset($description, $address, $price, $lat, $lng,  $id, $category)
     {
-        $description = pg_escape_string($this->connection, urldecode($description));
-        $address = pg_escape_string($this->connection, urldecode($address));
+        $description = urldecode($description);
+        $address = urldecode($address);
         $price = floatval($price);
         $lat = floatval($lat);
         $lng = floatval($lng);
-        $category = pg_escape_string($this->connection, urldecode($category));
-        $sql = "select * from add_asset_with_category('$description','$address',$price,$lat,$lng,$id,'$category')";
-        $result = pg_query($this->connection, $sql);
+        $category = urldecode($category);
+        $sql = "SELECT * FROM add_asset_with_category($1,$2,$3,$4,$5,$6,$7)";
+        $result = pg_query_params($this->connection, $sql, [$description, $address, $price, $lat, $lng, $id, $category]);
 
         if (!$result) {
             return ["error" => "failed"];

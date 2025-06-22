@@ -71,6 +71,7 @@ class MapController extends Controller {
 
             default:
                 // Default action, render the map view
+                $this->view->setTemplate("map");
                 $this->view->render([]);
                 break;
         }

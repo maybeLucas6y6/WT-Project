@@ -47,7 +47,8 @@ class assetController extends Controller{
             return;
         }
         $this->view->initAsset($asset);
-        $this->view->render();
+        $this->view->setTemplate("asset");
+        $this->view->render([]);
     }
 
    private function respondJSON($data)

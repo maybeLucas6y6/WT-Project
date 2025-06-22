@@ -9,8 +9,8 @@ class assetModel {
 
 
     public function addFavorite($id, $user_id) {
-        $sql = "INSERT INTO favorite_assets (user_id, asset_id) VALUES ($user_id,$id)";
-        $result = @pg_query($this->connection, $sql);
+        $sql = "INSERT INTO favorite_assets (user_id, asset_id) VALUES ($1,$2)";
+        $result = @pg_query_params($this->connection, $sql, [$user_id, $id]);
          if(!$result) {
             $error = pg_last_error($this->connection);
             return ["error"=> $error];
@@ -21,8 +21,8 @@ class assetModel {
     }
 
     public function removeFavorite($id, $user_id) {
-        $sql = "DELETE FROM favorite_assets WHERE $id = asset_id AND $user_id = user_id";
-        $result = pg_query($this->connection, $sql);
+        $sql = "DELETE FROM favorite_assets WHERE $1 = asset_id AND $2 = user_id";
+        $result = pg_query_params($this->connection, $sql, [$id, $user_id]);
          if(!$result) {
             return ["error"=> "error"];
         }
@@ -31,9 +31,9 @@ class assetModel {
         }
     }
     public function getAssetById($id){
-        $sql = "SELECT * FROM assets WHERE id = $id";
+        $sql = "SELECT * FROM assets WHERE id = $1";
 
-        $result = pg_query($this->connection, $sql);
+        $result = pg_query_params($this->connection, $sql, [$id]);
         $asset = pg_fetch_assoc($result);
         return $asset;
     }

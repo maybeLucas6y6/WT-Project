@@ -25,4 +25,9 @@ class AuthMiddleware
     {
         return $this->authController->getCurrentUser();
     }
+
+    public function isCurrentUserAdmin(): bool
+    {
+        return $this->authController->isCurrentUserAdmin();
+    }
 }

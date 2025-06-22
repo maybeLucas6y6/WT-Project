@@ -6,7 +6,7 @@ class Database
     private $port = "5432";
     private $dbname = "TW_Project";
     private $user = "postgres";
-    private $password = "testtest123!!!%#$$";
+    private $password = "lucalucaiov123!!!!%%oucaparola";
     private $connection;
 
     private function __construct()

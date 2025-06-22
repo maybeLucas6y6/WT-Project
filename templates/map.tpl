@@ -4,6 +4,8 @@
         <head>
             <title>Google Map - Iași, Romania</title>
             <link rel="stylesheet" href="/views/mapView.css">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="Real estate manager for people looking to buy and sell estates.">
         </head>
         <body>
             <div id="big-wrapper">
@@ -70,6 +72,17 @@
                 <input type="submit" value="Filtreaza!">
             </form>
 
+            <div>
+                <button class="fancy-button" onclick="window.location.href='/documentation'">Documentatie</button>
+            </div>
+
+            <div>
+                <button class="fancy-button" id="JSON-button">Export ca JSON</button>
+            </div>
+
+            <div>
+                <button class="fancy-button" id="CSV-button">Export ca si CSV</button>
+            </div>
             </div>
 
 

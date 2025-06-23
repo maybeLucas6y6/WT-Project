@@ -2,11 +2,11 @@
 class Database
 {
     private static $instance = null;
-    private $host = "";
+    private $host = "database-web.ctigssii84mr.eu-north-1.rds.amazonaws.com";
     private $port = "5432";
     private $dbname = "TW_Project";
     private $user = "postgres";
-    private $password = "";
+    private $password = "lucalucaiov123!!!!%%oucaparola";
     private $connection;
 
     private function __construct()

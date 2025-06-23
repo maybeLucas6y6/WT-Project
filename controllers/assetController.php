@@ -50,14 +50,19 @@ class assetController extends Controller
     public function viewAsset($id)
     {
         $asset = $this->model->getAssetById($id);
-
+        $user = $this->model->getOwnerByAssetId($id);
         if (!$asset) {
             echo "Asset not found.";
             return;
         }
         $this->view->initAsset($asset);
         $this->view->setTemplate("asset");
-        $this->view->render(['is_admin' => $this->authMiddleware->isCurrentUserAdmin()]);
+        $this->view->render(['is_admin' => $this->authMiddleware->isCurrentUserAdmin(), 'phone' => $user["phone_number"], 'email' => $user["email"], 'is_owner' => $this->isUserOwner($user["id"])]);
+    }
+
+    public function isUserOwner($owner_id){
+        //echo $this->authMiddleware->getAuthenticatedUser();
+        return $this->authMiddleware->getAuthenticatedUser() == $owner_id;
     }
 
     private function respondJSON($data)

@@ -26,10 +26,10 @@
 
     <script src="/views/assetView.js"></script>
 
-    {if $is_admin == true}
+    {if {$is_admin} == true}
         <form action="/asset/deleteAsset" method="POST"">
             <input type="hidden" name="id" value="{$id}"></input>
-            <input type="submit">Sterge acest asset</input>
+            <input type="submit" value="Sterge acest asset"></input>
         </form>
     {/if}
 </body>

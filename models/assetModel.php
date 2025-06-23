@@ -32,6 +32,22 @@ class assetModel
             return ["success" => "succeded"];
         }
     }
+
+    
+    public function getOwnerByAssetId($asset_id)
+    {
+        $sql = "SELECT * FROM users u JOIN assets a ON a.user_id = u.id AND a.id = $1";
+        $result = pg_query_params($this->connection, $sql, [$asset_id]);
+        if (!$result) {
+            return ["error" => "error"];
+        } else {
+            $user = [];
+            while ($row = pg_fetch_assoc($result)) {
+                $user[] = $row;
+            }
+            return $user[0];
+        }
+    }
     public function getAssetById($id)
     {
         $sql = "SELECT * FROM assets WHERE id = $1";

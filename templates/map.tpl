@@ -9,11 +9,7 @@
 </head>
 
 <body>
-    <form action="/auth/logout" method="post">
-        <button type="submit">Logout</button>
-    </form>
-
-    <div id="big-wrapper">
+    <div class="big-wrapper">
         <h2>Real Estate Manager</h2>
         <label>
             <input type="checkbox" id="pollution-toggle"> Arata grad poluare.
@@ -26,11 +22,11 @@
         </label>
         <div id="map"></div>
 
-        <div id="form-wrapper">
+        <div class="form-wrapper">
             <div>
                 <button id="form-button" class="fancy-button">Adauga oferta</button>
             </div>
-            <form id="add-asset-form" autocomplete="off" style="display: none;">
+            <form id="add-asset-form" autocomplete="off" style="display: none;" class="fancy-form">
                 <label for="address">Adresa:</label> <br>
                 <input type="text" id="address" name="address"> <br>
 
@@ -60,7 +56,7 @@
             <div>
                 <button id="filter-button" class="fancy-button">Filtreaza ofertele</button>
             </div>
-            <form id="filter-form" autocomplete="off" style="display: none;">
+            <form id="filter-form" autocomplete="off" style="display: none;" class="fancy-form">
                 <label for="min-price">Minimum price:</label> <br>
                 <input type="text" id="min-price" name="min-price"> <br>
                 <label for="max-price">Maximum Price:</label>
@@ -71,7 +67,7 @@
             <div>
                 <button id="nearby-button" class="fancy-button">Oferte in apropiere</button>
             </div>
-            <form id="nearby-form" autocomplete="off" style="display: none;">
+            <form id="nearby-form" autocomplete="off" style="display: none;" class="fancy-form">
                 <label for="nearby-address">Introdu adresa:</label> <br>
                 <input type="text" id="nearby-address" name="nearby-address"> <br>
                 <input type="submit" value="Filtreaza!">
@@ -90,6 +86,11 @@
             </div>
         </div>
 
+        <div>
+            <form action="/auth/logout" method="post">
+                <input type="submit" value="Logout" class="fancy-button"></input>
+            </form>
+        </div>
 
         <script src="views/mapView.js"></script>
         <script async defer

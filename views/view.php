@@ -9,6 +9,7 @@ abstract class View
     public function __construct()
     {
         $this->smarty = new Smarty\Smarty();
+        $this->smarty->escape_html = true;
         $this->smarty->setTemplateDir(PROJECT_ROOT . SLASH . 'templates');
         $this->smarty->setCompileDir(PROJECT_ROOT . SLASH . 'templates_c');
         $this->smarty->setCacheDir(PROJECT_ROOT . SLASH . 'cache');

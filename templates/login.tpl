@@ -10,11 +10,14 @@
 </head>
 
 <body>
-    <form action="/auth/login" method="post">
-        <input type="text" id="username" name="username" placeholder="Username" required> <br>
-        <input type="password" id="password" name="password" placeholder="Password" required> <br>
-        <input type="submit"></input>
-    </form>
+    <div class="big-wrapper">
+        <h1>Login</h1>
+        <form action="/auth/login" method="post" class="fancy-form">
+            <input type="text" id="username" name="username" placeholder="Username" required> <br>
+            <input type="password" id="password" name="password" placeholder="Password" required> <br>
+            <input type="submit" value="Login"></input>
+        </form>
+        <a href="/auth/register" class="fancy-button">Register</a>
+    </div>
 </body>
-
 </html>

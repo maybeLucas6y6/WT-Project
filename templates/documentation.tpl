@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/views/mapView.css">
 </head>
 <body>
-<div id="big-wrapper">
+<div class="big-wrapper">
 <h1>Documentatie proiect TW - REAL ESTATE MANAGER</h1>
 <h2>Cuprins</h2>
 <ul>

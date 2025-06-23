@@ -10,28 +10,28 @@
 </head>
 
 <body>
-    <div id="big-wrapper">
+    <div class="big-wrapper">
         <h1>Asset Details</h1>
         <p><strong>Address:</strong> {$address} </p>
         <p><strong>Description:</strong> {$description}</p>
         <p><strong>Price:</strong> {$price}</p>
 
         <a href="/map" class="fancy-button">Inapoi catre harta</a>
-        <div id="small-wrapper">
+        <div class="small-wrapper">
             <button id="add-to-favorites-button" class="fancy-button" data-asset-id={$id}>Adaugati la favorite</button>
             <button id="remove-from-favorites-button" class="fancy-button" data-asset-id={$id}>Stergeti din
                 favorite</button>
         </div>
+
+        {if {$is_admin} == true}
+            <form action="/asset/deleteAsset" method="POST"">
+                <input type="hidden" name="id" value="{$id}"></input>
+                <input type="submit" value="Sterge acest asset" class="fancy-button"></input>
+            </form>
+        {/if}
     </div>
 
     <script src="/views/assetView.js"></script>
-
-    {if {$is_admin} == true}
-        <form action="/asset/deleteAsset" method="POST"">
-            <input type="hidden" name="id" value="{$id}"></input>
-            <input type="submit" value="Sterge acest asset"></input>
-        </form>
-    {/if}
 </body>
 
 </html>

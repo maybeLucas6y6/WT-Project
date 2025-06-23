@@ -22,7 +22,7 @@
             color: #34495e;
         }
 
-        form {
+        .fancy-form {
             background-color: #fff;
             max-width: 600px;
             margin: 20px auto;
@@ -36,12 +36,12 @@
             gap: 15px;
         }
 
-        form label {
+        .fancy-form label {
             justify-content: flex-start;
             font-weight: 600;
         }
 
-        form input[type="text"], form input[type="password"] {
+        .fancy-form input[type="text"], .fancy-form input[type="password"] {
             padding: 10px;
             border-radius: 8px;
             border: 1px solid #ccc;
@@ -49,7 +49,7 @@
             width: 100%;
         }
 
-        form input[type="submit"] {
+        .fancy-form input[type="submit"] {
             background-color: #3498db;
             color: white;
             margin:20px auto;
@@ -61,12 +61,12 @@
             transition: background-color 0.3s ease;
         }
 
-        form input[type="submit"]:hover {
+        .fancy-form input[type="submit"]:hover {
             
             background-color: #2980b9;
         }
 
-        #form-wrapper, #small-wrapper {
+        .form-wrapper, .small-wrapper {
             flex-wrap: wrap;
             display: flex;
             align-items: center;
@@ -94,7 +94,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
-        #big-wrapper {
+        .big-wrapper {
             width: 85%;
             margin: 30px auto;
             background-color:#f9f9f9;

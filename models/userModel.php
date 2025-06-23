@@ -74,7 +74,7 @@ class UserModel
 
         if ($result && pg_num_rows($result) > 0) {
             $user = pg_fetch_assoc($result);
-            return (bool)$user['is_admin'];
+            return (bool) ($user['is_admin'] == 't');
         } else {
             return false;
         }
